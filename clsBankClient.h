@@ -43,6 +43,11 @@ public:
 		_AccountBalance = AccountBalance;
 	}
 
+	bool _IsEmpty()
+	{
+		return (_Mode == enMode::EmptyMode);
+	}
+
 	string AccountNumber()
 	{
 		return _AccountNumber;
@@ -140,6 +145,14 @@ public:
 		}
 
 		return _GetEmptyClientObject();
+	}
+
+	// Update Client
+
+	static bool IsClientExist(string AccountNumber)
+	{
+		clsBankClient Client = clsBankClient::Find(AccountNumber);
+		return (!Client._IsEmpty());
 	}
 
 };
