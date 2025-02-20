@@ -13,12 +13,19 @@ class clsBankClient : public clsPerson
 	string _PinCode;
 	float _AccountBalance;
 
+	enum enMode { EmptyMode = 0, UpdateMode = 1 };
+	enMode _Mode;
+
+	static clsBankClient _GetEmptyClientObject()
+	{
+		return clsBankClient(enMode::EmptyMode, "", "", "", "", "", "", 0);
+	}
 
 public:
-	clsBankClient(string FirstName, string LastName, string Email, string Phone, string AccountNumber, string PinCode, float AccountBalance) :
+	clsBankClient(enMode Mode, string FirstName, string LastName, string Email, string Phone, string AccountNumber, string PinCode, float AccountBalance) :
 		clsPerson(FirstName, LastName, Email, Phone)
 	{
-		
+		_Mode = Mode;
 		_AccountNumber = AccountNumber;
 		_PinCode = PinCode;
 		_AccountBalance = AccountBalance;
