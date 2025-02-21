@@ -1,13 +1,15 @@
 #include <iostream>
-#include "clsPErson.h"
+#include "clsBankClient.h"
+
 using namespace std;
 
 int main()
 {
 
-    clsPerson Person1 = clsPerson("Imad", "Boujnane", "+190842326588", "email@gmail.com");
+    clsBankClient Client1 = clsBankClient::Find("A101");
 
-    cout << Person1.FullName() << endl;
+    Client1.Print();
+   
 
     system("pause > 0");
     return 0;
