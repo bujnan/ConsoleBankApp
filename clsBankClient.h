@@ -33,6 +33,80 @@ class clsBankClient : public clsPerson
 
 	}
 
+	static vector <clsBankClient> _LoadClientsDataFromFile()
+	{
+		vector <clsBankClient> vClients;
+		
+		fstream MyFile;
+		MyFile.open("Clients.txt", ios::in);
+
+		if (MyFile.is_open())
+		{
+			string Line;
+			while (getline(MyFile, Line))
+			{
+				clsBankClient Client = _ConvertLineToClientObject(Line, "#//#");
+				vClients.push_back(Client);
+			}
+
+			MyFile.close();
+		}
+
+		return vClients;
+	}
+
+	static string _ConvertClientObjectToLine(clsBankClient Client, string Seperator = "#//#")
+	{
+
+		string stClientRecord = "";
+		stClientRecord += Client.FirstName + Seperator;
+		stClientRecord += Client.LastName + Seperator;
+		stClientRecord += Client.Email + Seperator;
+		stClientRecord += Client.Phone + Seperator;
+		stClientRecord += Client.AccountNumber() + Seperator;
+		stClientRecord += Client.PinCode + Seperator;
+		stClientRecord += to_string(Client.AccountBalance);
+
+		return stClientRecord;
+
+	}
+
+
+	static void _SaveClientsDataToFile(vector <clsBankClient> vClients)
+	{
+		fstream MyFile;
+		MyFile.open("Clients.txt", ios::out);
+
+		string DataLine;
+		if (MyFile.is_open())
+		{
+			for (clsBankClient C : vClients)
+			{
+				DataLine = _ConvertClientObjectToLine(C);
+				MyFile << DataLine << endl;
+			}
+		}
+		MyFile.close();
+	}
+
+	void _Update()
+	{
+		vector <clsBankClient> _vClients;
+		_vClients = _LoadClientsDataFromFile();
+
+		for (clsBankClient& C : _vClients)
+		{
+			if (C.AccountNumber() == AccountNumber())
+			{
+				C = *this;
+				break;
+			}
+		}
+
+		_SaveClientsDataToFile(_vClients);
+
+	}
+
 public:
 	clsBankClient(enMode Mode, string FirstName, string LastName, string Email, string Phone, string AccountNumber, string PinCode, float AccountBalance) :
 		clsPerson(FirstName, LastName, Email, Phone)
@@ -147,12 +221,26 @@ public:
 		return _GetEmptyClientObject();
 	}
 
-	// Update Client
+	// Update Client and Save it to File
 
 	static bool IsClientExist(string AccountNumber)
 	{
 		clsBankClient Client = clsBankClient::Find(AccountNumber);
 		return (!Client._IsEmpty());
+	}
+
+	enum enSaveResults {svFailedEmptyObject = 0, svSucceeded = 1};
+	enSaveResults Save()
+	{
+		switch (_Mode)
+		{
+			case enMode::EmptyMode:
+				return enSaveResults::svFailedEmptyObject;
+				
+			case enMode::UpdateMode: 
+				_Update();
+				return enSaveResults::svSucceeded;
+		}	
 	}
 
 };
