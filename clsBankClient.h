@@ -107,6 +107,26 @@ class clsBankClient : public clsPerson
 
 	}
 
+	void _AddNew()
+	{
+		_AddDataLineToFile(_ConvertClientObjectToLine(*this));
+	}
+
+	void _AddDataLineToFile(string  stDataLine)
+	{
+		fstream MyFile;
+		MyFile.open("Clients.txt", ios::out | ios::app);
+
+		if (MyFile.is_open())
+		{
+
+			MyFile << stDataLine << endl;
+
+			MyFile.close();
+		}
+
+	}
+
 public:
 	clsBankClient(enMode Mode, string FirstName, string LastName, string Email, string Phone, string AccountNumber, string PinCode, float AccountBalance) :
 		clsPerson(FirstName, LastName, Email, Phone)
@@ -229,7 +249,7 @@ public:
 		return (!Client._IsEmpty());
 	}
 
-	enum enSaveResults {svFailedEmptyObject = 0, svSucceeded = 1};
+	enum enSaveResults {svFailedEmptyObject = 0, svSucceeded = 1, svFailedAccNumExists = 2};
 	enSaveResults Save()
 	{
 		switch (_Mode)
@@ -240,6 +260,12 @@ public:
 			case enMode::UpdateMode: 
 				_Update();
 				return enSaveResults::svSucceeded;
+
+			case enMode::AddNewMode:
+				_AddNew();
+				_Mode = enMode::UpdateMode;
+				return enSaveResults::svSucceeded;
+
 		}	
 	}
 
@@ -251,5 +277,7 @@ public:
 
 		return clsBankClient(enMode::AddNewMode, "", "", "", "", AccountNumber, "", 0);
 	}
+
+	
 
 };

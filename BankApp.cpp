@@ -39,6 +39,27 @@ void AddNewClient()
     clsBankClient NewClient = clsBankClient::GetAddNewClientObject(AccountNumber);
     ReadClientInfo(NewClient);
 
+    clsBankClient::enSaveResults SaveResult;
+    SaveResult = NewClient.Save();
+
+    switch (SaveResult)
+    {
+    case clsBankClient::enSaveResults::svSucceeded:
+        cout << "\nAccount Added Successfully";
+        NewClient.Print();
+        break;
+
+    case clsBankClient::enSaveResults::svFailedEmptyObject:
+        cout << "\nAccount Not Saved Because it is Empty";
+        break;
+
+    case clsBankClient::enSaveResults::svFailedAccNumExists:
+        cout << "\nAccount Not Saved Because Account Number is Used";
+        break;
+    }
+
+
+
 }
 
 int main()
