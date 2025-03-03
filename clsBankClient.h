@@ -13,7 +13,7 @@ class clsBankClient : public clsPerson
 	string _PinCode;
 	float _AccountBalance;
 
-	enum enMode { EmptyMode = 0, UpdateMode = 1 };
+	enum enMode { EmptyMode = 0, UpdateMode = 1, AddNewMode = 2 };
 	enMode _Mode;
 
 	static clsBankClient _GetEmptyClientObject()
@@ -241,6 +241,15 @@ public:
 				_Update();
 				return enSaveResults::svSucceeded;
 		}	
+	}
+
+
+	static clsBankClient GetAddNewClientObject(string AccountNumber)
+	{
+		/*clsBankClient Client(enMode::AddNewMode, "", "", "", "", AccountNumber, "", 0);
+		return Client;*/
+
+		return clsBankClient(enMode::AddNewMode, "", "", "", "", AccountNumber, "", 0);
 	}
 
 };
