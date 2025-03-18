@@ -1,46 +1,61 @@
 #include <iostream>
 #include "clsInputValidate.h"
 #include "clsBankClient.h"
+#include <iomanip>
 using namespace std;
 
-void DeleteClient()
+void PrintClientRecordLine(clsBankClient Client)
 {
-    string AccountNumber = "";
 
-    cout << "Please Enter Account Number: ";
-    AccountNumber = clsInputValidate::ReadString();
+    cout << "| " << setw(15) << left << Client.AccountNumber();
+    cout << "| " << setw(20) << left << Client.FullName();
+    cout << "| " << setw(12) << left << Client.Phone;
+    cout << "| " << setw(20) << left << Client.Email;
+    cout << "| " << setw(10) << left << Client.PinCode;
+    cout << "| " << setw(12) << left << Client.AccountBalance;
 
-    while (!clsBankClient::IsClientExist(AccountNumber))
-    {
-        cout << "\nAccount Number DOES Not Exist, Please Choose Another One: ";
-        AccountNumber = clsInputValidate::ReadString();
-    }
-
-    clsBankClient Client = clsBankClient::Find(AccountNumber);
-    Client.Print();
-
-    cout << "\nAre You Sure You Want to Delete this Client y/n?: ";
-    char Answer = 'n';
-    cin >> Answer;
-
-    if (Answer == 'y' || Answer == 'Y')
-    {
-        if (Client.Delete())
-        {
-            cout << "\nClient Deleted Successfully";
-            Client.Print(); // to Verify That the Client Object Has Been Deleted Also From Memory
-        }
-        else
-        {
-            cout << "\nError! Client Was NOT Deleted";
-        }
-    }
 }
+
+
+void ShowClientsList()
+{
+
+    vector <clsBankClient> vClients = clsBankClient::GetClientsList();
+
+    cout << "\n\t\t\t\t\tClient List (" << vClients.size() << ") Client(s).";
+    cout << "\n_______________________________________________________";
+    cout << "_________________________________________\n" << endl;
+
+    cout << "| " << left << setw(15) << "Accout Number";
+    cout << "| " << left << setw(20) << "Client Name";
+    cout << "| " << left << setw(12) << "Phone";
+    cout << "| " << left << setw(20) << "Email";
+    cout << "| " << left << setw(10) << "Pin Code";
+    cout << "| " << left << setw(12) << "Balance";
+    cout << "\n_______________________________________________________";
+    cout << "_________________________________________\n" << endl;
+
+    if (vClients.size() == 0)
+        cout << "\t\t\t\tNo Clients Available In the System!";
+    else
+
+        for (clsBankClient Client : vClients)
+        {
+
+            PrintClientRecordLine(Client);
+            cout << endl;
+        }
+
+    cout << "\n_______________________________________________________";
+    cout << "_________________________________________\n" << endl;
+
+}
+
 
 int main()
 {
 
-    DeleteClient();
+    ShowClientsList();
     
 
     system("pause > 0");
