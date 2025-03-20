@@ -2,6 +2,7 @@
 #include "clsInputValidate.h"
 #include "clsBankClient.h"
 #include <iomanip>
+#include "clsUtil.h"
 using namespace std;
 
 void PrintClientRecordBalanceLine(clsBankClient Client)
@@ -44,7 +45,7 @@ void ShowTotalBalances()
     cout << "\n_______________________________________________________";
     cout << "_________________________________________\n" << endl;
     cout << "\t\t\t\t\t   Total Balances = " << TotalBalances << endl;
-   
+    cout << "\t\t\t\t\t   ( " << clsUtil::NumberToText(TotalBalances) << ")";
 }
 
 
